@@ -27,12 +27,11 @@ def add_form():
         counseled_by = request.form.get('counseled_by')
         principal_comments = request.form.get('principal_comments')
 
-        # For now, just print it or later write to Excel
+        # For now, just print the submitted data (can be replaced with Excel saving later)
         print("Form submitted:")
         print(f"{session=}, {form_number=}, {date=}, {name=}, {admission_class=}, {father_name=}, {father_occupation=}")
         print(f"{address=}, {referred_by=}, {last_school=}, {phone=}, {school_visited=}, {comments=}, {counseled_by=}, {principal_comments=}")
 
-        # Redirect or thank you page later
         return redirect(url_for('home'))
 
     return render_template('add.html')
