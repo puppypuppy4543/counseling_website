@@ -1,41 +1,49 @@
-from flask import Flask, render_template, request, redirect, url_for
-import os
+from flask import Flask, render_template, request, redirect
+import gspread
+from google.oauth2.service_account import Credentials
 
 app = Flask(__name__)
 
-@app.route('/')
-def home():
-    return render_template('index.html')
+# Google Sheets setup
+scope = ["https://www.googleapis.com/auth/spreadsheets"]
+creds = Credentials.from_service_account_file("credentials.json", scopes=scope)
+client = gspread.authorize(creds)
+sheet = client.open("Counseling Form Submissions").sheet1
 
-@app.route('/add', methods=['GET', 'POST'])
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+@app.route("/add", methods=["GET", "POST"])
 def add_form():
-    if request.method == 'POST':
-        # Access form fields
-        session = request.form.get('session')
-        form_number = request.form.get('form_number')
-        date = request.form.get('date')
-        name = request.form.get('name')
-        admission_class = request.form.get('admission_class')
-        father_name = request.form.get('father_name')
-        father_occupation = request.form.get('father_occupation')
-        address = request.form.get('address')
-        referred_by = request.form.get('referred_by')
-        last_school = request.form.get('last_school')
-        phone = request.form.get('phone')
-        school_visited = request.form.get('school_visited')
-        comments = request.form.get('comments')
-        counseled_by = request.form.get('counseled_by')
-        principal_comments = request.form.get('principal_comments')
+    if request.method == "POST":
+        data = [
+            request.form["session"],
+            request.form["form_number"],
+            request.form["date"],
+            request.form["student_name"],
+            request.form["admission_class"],
+            request.form["father_name"],
+            request.form.get("father_occupation", ""),
+            request.form.get("address", ""),
+            request.form.get("referred_by", ""),
+            request.form.get("last_school", ""),
+            request.form["phone_number"],
+            request.form["school_visited"],
+            request.form.get("comments", ""),
+            request.form.get("counseled_by", ""),
+            request.form.get("proposed_fee", ""),
+            request.form.get("discount_given", ""),
+            request.form.get("parent_agrees", ""),
+            request.form.get("principal_comments", "")
+        ]
+        sheet.append_row(data)
+        return redirect("/")
+    return render_template("add.html")
 
-        # For now, just print the submitted data (can be replaced with Excel saving later)
-        print("Form submitted:")
-        print(f"{session=}, {form_number=}, {date=}, {name=}, {admission_class=}, {father_name=}, {father_occupation=}")
-        print(f"{address=}, {referred_by=}, {last_school=}, {phone=}, {school_visited=}, {comments=}, {counseled_by=}, {principal_comments=}")
+@app.route("/search")
+def search():
+    return render_template("search.html")
 
-        return redirect(url_for('home'))
-
-    return render_template('add.html')
-
-if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+if __name__ == "__main__":
+    app.run(debug=True)
