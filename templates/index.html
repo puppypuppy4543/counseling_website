@@ -39,8 +39,13 @@
 
   <h1>Fluorescent Public School Counseling Forms</h1>
 
-  <button class="button" onclick="window.location.href='add.html'">Create/Add a New Form</button>
-  <button class="button" onclick="window.location.href='search.html'">Search Existing Forms</button>
+  <a href="{{ url_for('add_form') }}">
+    <button class="button">Create/Add a New Form</button>
+  </a>
+
+  <a href="search.html">
+    <button class="button">Search Existing Forms</button>
+  </a>
 
 </body>
 </html>
