@@ -8,10 +8,11 @@ app = Flask(__name__)
 
 # Google Sheets setup using environment variable
 scope = ["https://www.googleapis.com/auth/spreadsheets"]
-creds_dict = json.loads(os.environ["GOOGLE_CREDENTIALS"])
+creds_dict = json.loads(os.environ["GOOGLE_APPLICATION_CREDENTIALS_JSON"])
 creds = Credentials.from_service_account_info(creds_dict, scopes=scope)
 client = gspread.authorize(creds)
-sheet = client.open("Counseling Form Submissions").sheet1
+sheet = client.open("Counseling Form Submissions").worksheet("Sheet1")
+
 
 @app.route("/")
 def index():
