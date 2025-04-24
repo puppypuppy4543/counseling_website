@@ -1,12 +1,15 @@
 from flask import Flask, render_template, request, redirect
 import gspread
+import os
+import json
 from google.oauth2.service_account import Credentials
 
 app = Flask(__name__)
 
-# Google Sheets setup
+# Google Sheets setup using environment variable
 scope = ["https://www.googleapis.com/auth/spreadsheets"]
-creds = Credentials.from_service_account_file("credentials.json", scopes=scope)
+creds_dict = json.loads(os.environ["GOOGLE_CREDENTIALS"])
+creds = Credentials.from_service_account_info(creds_dict, scopes=scope)
 client = gspread.authorize(creds)
 sheet = client.open("Counseling Form Submissions").sheet1
 
