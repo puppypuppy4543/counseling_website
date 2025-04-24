@@ -13,7 +13,6 @@ creds = Credentials.from_service_account_info(creds_dict, scopes=scope)
 client = gspread.authorize(creds)
 sheet = client.open("Counseling Form Submissions").worksheet("Sheet1")
 
-
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -41,7 +40,14 @@ def add_form():
             request.form.get("parent_agrees", ""),
             request.form.get("principal_comments", "")
         ]
-        sheet.append_row(data)
+
+        # Try to append data to Google Sheets
+        try:
+            sheet.append_row(data)
+            print("✅ Data successfully written to Google Sheet.")
+        except Exception as e:
+            print("❌ ERROR while writing to sheet:", e)
+
         return redirect("/")
     return render_template("add.html")
 
