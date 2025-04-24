@@ -22,3 +22,5 @@ PyRect==0.2.0
 PyScreeze==1.0.1
 pytweening==1.2.0
 Werkzeug==3.1.3
+gspread==6.2.0
+google-auth==2.29.0
