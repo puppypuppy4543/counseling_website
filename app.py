@@ -9,7 +9,7 @@ app = Flask(__name__)
 # Google Sheets setup (uses env variable or falls back to local file)
 scope = [
     "https://www.googleapis.com/auth/spreadsheets",
-    "https://www.googleapis.com/auth/drive"
+    "https://www.googleapis.com/auth/drive.file"  # Added .file to allow proper access to the Drive
 ]
 
 # TEMP DEBUGGING BLOCK (You can delete this after everything works)
@@ -39,7 +39,11 @@ else:
 client = gspread.authorize(creds)
 
 # Access the sheet by name and worksheet
-sheet = client.open("Counseling Form Submissions").worksheet("Sheet1")
+try:
+    sheet = client.open("Counseling Form Submissions").worksheet("Sheet1")
+    print("✅ Successfully connected to the sheet.")
+except Exception as e:
+    print("❌ ERROR connecting to the sheet:", e)
 
 @app.route("/")
 def index():
