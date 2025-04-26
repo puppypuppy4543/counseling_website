@@ -12,6 +12,22 @@ scope = [
     "https://www.googleapis.com/auth/drive"
 ]
 
+# TEMP DEBUGGING BLOCK (You can delete this after everything works)
+print("\n=== DEBUGGING GOOGLE_CREDENTIALS ENV VARIABLE ===")
+google_credentials_env = os.environ.get("GOOGLE_CREDENTIALS")
+if google_credentials_env:
+    try:
+        creds_preview = json.loads(google_credentials_env)
+        print("✅ Environment variable loaded and parsed successfully.")
+        print(f"Service Account Email: {creds_preview.get('client_email', 'N/A')}")
+        print(f"Project ID: {creds_preview.get('project_id', 'N/A')}")
+    except Exception as e:
+        print(f"❌ Error parsing GOOGLE_CREDENTIALS: {e}")
+else:
+    print("❌ GOOGLE_CREDENTIALS environment variable not found.")
+print("===============================================\n")
+# END OF TEMP DEBUGGING BLOCK
+
 if "GOOGLE_CREDENTIALS" in os.environ:
     creds_dict = json.loads(os.environ["GOOGLE_CREDENTIALS"])
     creds = Credentials.from_service_account_info(creds_dict, scopes=scope)
