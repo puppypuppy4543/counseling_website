@@ -6,44 +6,30 @@ from google.oauth2.service_account import Credentials
 
 app = Flask(__name__)
 
-# Google Sheets setup (uses env variable or falls back to local file)
+# Google Sheets setup
 scope = [
-    "https://www.googleapis.com/auth/spreadsheets",
-    "https://www.googleapis.com/auth/drive.file"  # Added .file to allow proper access to the Drive
+    "https://www.googleapis.com/auth/spreadsheets"
 ]
 
-# TEMP DEBUGGING BLOCK (You can delete this after everything works)
-print("\n=== DEBUGGING GOOGLE_CREDENTIALS ENV VARIABLE ===")
-google_credentials_env = os.environ.get("GOOGLE_CREDENTIALS")
-if google_credentials_env:
-    try:
-        creds_preview = json.loads(google_credentials_env)
-        print("✅ Environment variable loaded and parsed successfully.")
-        print(f"Service Account Email: {creds_preview.get('client_email', 'N/A')}")
-        print(f"Project ID: {creds_preview.get('project_id', 'N/A')}")
-    except Exception as e:
-        print(f"❌ Error parsing GOOGLE_CREDENTIALS: {e}")
-else:
-    print("❌ GOOGLE_CREDENTIALS environment variable not found.")
-print("===============================================\n")
-# END OF TEMP DEBUGGING BLOCK
-
-# Authentication using service account credentials from env variable or a local file
+# Authentication using service account credentials from environment variable
 if "GOOGLE_CREDENTIALS" in os.environ:
     creds_dict = json.loads(os.environ["GOOGLE_CREDENTIALS"])
     creds = Credentials.from_service_account_info(creds_dict, scopes=scope)
 else:
+    # fallback for local development
     creds = Credentials.from_service_account_file("credentials.json", scopes=scope)
 
-# Authorizing gspread with the credentials
+# Authorize gspread with the credentials
 client = gspread.authorize(creds)
 
-# Access the sheet by name and worksheet
+# Spreadsheet setup
+SPREADSHEET_ID = "1vb_dh0SrwmKU8ZmXs0xNod1GJlvcMu-XqbyymeAkdyg"
 try:
-    sheet = client.open("Counseling Form Submissions").worksheet("Sheet1")
-    print("✅ Successfully connected to the sheet.")
+    sheet = client.open_by_key(SPREADSHEET_ID).worksheet("Sheet1")
+    print("✅ Successfully connected to Google Sheet.")
 except Exception as e:
-    print("❌ ERROR connecting to the sheet:", e)
+    print(f"❌ ERROR connecting to Google Sheet: {e}")
+    sheet = None  # Prevent crashing if connection fails
 
 @app.route("/")
 def index():
@@ -53,18 +39,18 @@ def index():
 def add_form():
     if request.method == "POST":
         data = [
-            request.form["session"],
-            request.form["form_number"],
-            request.form["date"],
-            request.form["student_name"],
-            request.form["admission_class"],
-            request.form["father_name"],
+            request.form.get("session", ""),
+            request.form.get("form_number", ""),
+            request.form.get("date", ""),
+            request.form.get("student_name", ""),
+            request.form.get("admission_class", ""),
+            request.form.get("father_name", ""),
             request.form.get("father_occupation", ""),
             request.form.get("address", ""),
             request.form.get("referred_by", ""),
             request.form.get("last_school", ""),
-            request.form["phone_number"],
-            request.form["school_visited"],
+            request.form.get("phone_number", ""),
+            request.form.get("school_visited", ""),
             request.form.get("comments", ""),
             request.form.get("counseled_by", ""),
             request.form.get("proposed_fee", ""),
@@ -73,12 +59,13 @@ def add_form():
             request.form.get("principal_comments", "")
         ]
 
-        # Try to append data to Google Sheets
-        try:
-            sheet.append_row(data)
-            print("✅ Data successfully written to Google Sheet.")
-        except Exception as e:
-            print("❌ ERROR while writing to sheet:", e)
+        # Save to Google Sheet
+        if sheet:
+            try:
+                sheet.append_row(data)
+                print("✅ Data successfully saved to Google Sheet.")
+            except Exception as e:
+                print(f"❌ ERROR saving data to Google Sheet: {e}")
 
         return redirect("/")
     return render_template("add.html")
