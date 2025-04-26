@@ -28,13 +28,17 @@ else:
 print("===============================================\n")
 # END OF TEMP DEBUGGING BLOCK
 
+# Authentication using service account credentials from env variable or a local file
 if "GOOGLE_CREDENTIALS" in os.environ:
     creds_dict = json.loads(os.environ["GOOGLE_CREDENTIALS"])
     creds = Credentials.from_service_account_info(creds_dict, scopes=scope)
 else:
     creds = Credentials.from_service_account_file("credentials.json", scopes=scope)
 
+# Authorizing gspread with the credentials
 client = gspread.authorize(creds)
+
+# Access the sheet by name and worksheet
 sheet = client.open("Counseling Form Submissions").worksheet("Sheet1")
 
 @app.route("/")
