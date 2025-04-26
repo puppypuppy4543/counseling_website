@@ -7,8 +7,12 @@ from google.oauth2.service_account import Credentials
 app = Flask(__name__)
 
 # Google Sheets setup
+# We need multiple scopes depending on the desired Google Sheets access. 
+# For appending rows and reading, we can use the following:
 scope = [
-    "https://www.googleapis.com/auth/spreadsheets"
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive.file",
+    "https://www.googleapis.com/auth/drive.readonly"
 ]
 
 # Authentication using service account credentials from environment variable
@@ -22,7 +26,7 @@ else:
 # Authorize gspread with the credentials
 client = gspread.authorize(creds)
 
-# Spreadsheet setup
+# Spreadsheet setup (replace with your actual Spreadsheet ID)
 SPREADSHEET_ID = "1vb_dh0SrwmKU8ZmXs0xNod1GJlvcMu-XqbyymeAkdyg"
 try:
     sheet = client.open_by_key(SPREADSHEET_ID).worksheet("Sheet1")
@@ -38,6 +42,7 @@ def index():
 @app.route("/add", methods=["GET", "POST"])
 def add_form():
     if request.method == "POST":
+        # Capture form data and prepare it for saving to the sheet
         data = [
             request.form.get("session", ""),
             request.form.get("form_number", ""),
@@ -59,15 +64,17 @@ def add_form():
             request.form.get("principal_comments", "")
         ]
 
-        # Save to Google Sheet
+        # Save to Google Sheet if connection exists
         if sheet:
             try:
                 sheet.append_row(data)
                 print("✅ Data successfully saved to Google Sheet.")
             except Exception as e:
                 print(f"❌ ERROR saving data to Google Sheet: {e}")
-
+        else:
+            print("❌ No sheet connection available.")
         return redirect("/")
+    
     return render_template("add.html")
 
 @app.route("/search")
