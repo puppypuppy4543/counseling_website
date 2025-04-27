@@ -6,12 +6,34 @@ from google.oauth2.service_account import Credentials
 
 app = Flask(__name__)
 
-# Google Sheets setup using environment variable
-scope = ["https://www.googleapis.com/auth/spreadsheets"]
-creds_dict = json.loads(os.environ["GOOGLE_CREDENTIALS"])
-creds = Credentials.from_service_account_info(creds_dict, scopes=scope)
+# Google Sheets setup
+# We need multiple scopes depending on the desired Google Sheets access. 
+# For appending rows and reading, we can use the following:
+scope = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive.file",
+    "https://www.googleapis.com/auth/drive.readonly"
+]
+
+# Authentication using service account credentials from environment variable
+if "GOOGLE_CREDENTIALS" in os.environ:
+    creds_dict = json.loads(os.environ["GOOGLE_CREDENTIALS"])
+    creds = Credentials.from_service_account_info(creds_dict, scopes=scope)
+else:
+    # fallback for local development
+    creds = Credentials.from_service_account_file("credentials.json", scopes=scope)
+
+# Authorize gspread with the credentials
 client = gspread.authorize(creds)
-sheet = client.open("Counseling Form Submissions").sheet1
+
+# Spreadsheet setup (replace with your actual Spreadsheet ID)
+SPREADSHEET_ID = "1vb_dh0SrwmKU8ZmXs0xNod1GJlvcMu-XqbyymeAkdyg"
+try:
+    sheet = client.open_by_key(SPREADSHEET_ID).worksheet("Sheet1")
+    print("✅ Successfully connected to Google Sheet.")
+except Exception as e:
+    print(f"❌ ERROR connecting to Google Sheet: {e}")
+    sheet = None  # Prevent crashing if connection fails
 
 @app.route("/")
 def index():
@@ -20,19 +42,20 @@ def index():
 @app.route("/add", methods=["GET", "POST"])
 def add_form():
     if request.method == "POST":
+        # Capture form data and prepare it for saving to the sheet
         data = [
-            request.form["session"],
-            request.form["form_number"],
-            request.form["date"],
-            request.form["student_name"],
-            request.form["admission_class"],
-            request.form["father_name"],
+            request.form.get("session", ""),
+            request.form.get("form_number", ""),
+            request.form.get("date", ""),
+            request.form.get("student_name", ""),
+            request.form.get("admission_class", ""),
+            request.form.get("father_name", ""),
             request.form.get("father_occupation", ""),
             request.form.get("address", ""),
             request.form.get("referred_by", ""),
             request.form.get("last_school", ""),
-            request.form["phone_number"],
-            request.form["school_visited"],
+            request.form.get("phone_number", ""),
+            request.form.get("school_visited", ""),
             request.form.get("comments", ""),
             request.form.get("counseled_by", ""),
             request.form.get("proposed_fee", ""),
@@ -40,8 +63,18 @@ def add_form():
             request.form.get("parent_agrees", ""),
             request.form.get("principal_comments", "")
         ]
-        sheet.append_row(data)
+
+        # Save to Google Sheet if connection exists
+        if sheet:
+            try:
+                sheet.append_row(data)
+                print("✅ Data successfully saved to Google Sheet.")
+            except Exception as e:
+                print(f"❌ ERROR saving data to Google Sheet: {e}")
+        else:
+            print("❌ No sheet connection available.")
         return redirect("/")
+    
     return render_template("add.html")
 
 @app.route("/search")
