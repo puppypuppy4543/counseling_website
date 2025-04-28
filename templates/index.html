@@ -5,93 +5,114 @@
   <title>Fluorescent Public School Counseling</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to right, #e0f7ff, #ffffff);
       margin: 0;
       padding: 0;
-      text-align: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #e0f0ff, #ffffff);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      animation: fadeIn 1.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     header {
-      background-color: #004080;
-      padding: 20px;
-      color: white;
+      margin-top: 30px;
+      text-align: center;
     }
 
     header img {
-      width: 100px;
-      display: block;
-      margin: 0 auto 10px auto;
+      width: 150px;
+      height: auto;
     }
 
-    header h1 {
-      font-size: 32px;
-      margin: 10px 0 5px 0;
+    h1 {
+      font-size: 36px;
+      margin: 20px 0;
+      color: #003366;
     }
 
     .container {
-      padding: 40px 20px;
+      display: flex;
+      width: 90%;
+      max-width: 1200px;
+      margin-top: 30px;
+      margin-bottom: 50px;
     }
 
-    .building-img {
-      width: 90%;
-      max-width: 600px;
-      height: auto;
-      border-radius: 15px;
-      margin: 20px auto;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    .left-side, .right-side {
+      flex: 1;
+      padding: 20px;
+      color: #003366;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .center {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
     }
 
     .button {
-      display: block;
-      width: 280px;
-      margin: 20px auto;
-      padding: 18px;
-      background-color: #004080;
+      width: 250px;
+      padding: 15px;
+      background-color: #003366;
       color: white;
       border: none;
       font-size: 18px;
-      font-weight: bold;
       cursor: pointer;
-      border-radius: 12px;
-      transition: background-color 0.3s, transform 0.2s;
+      border-radius: 10px;
+      transition: background-color 0.3s;
       text-decoration: none;
     }
 
     .button:hover {
-      background-color: #0066cc;
-      transform: scale(1.05);
+      background-color: #0055a5;
     }
 
-    footer {
-      margin-top: 40px;
-      padding: 20px;
-      font-size: 14px;
-      color: #555;
+    .building-image {
+      margin-top: 30px;
+      width: 100%;
+      max-width: 500px;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     }
   </style>
 </head>
+
 <body>
 
   <header>
     <img src="{{ url_for('static', filename='logo.jpg') }}" alt="School Logo">
-    <h1>Fluorescent Public School</h1>
-    <p>The Little Bright Leaders</p>
+    <h1>Fluorescent Public School Counseling</h1>
   </header>
 
   <div class="container">
+    <div class="left-side">
+      Shaping Bright Futures
+    </div>
 
-    <img src="{{ url_for('static', filename='building.jpg') }}" alt="School Building" class="building-img">
+    <div class="center">
+      <a href="{{ url_for('add_form') }}" class="button">Create/Add a New Form</a>
+      <a href="{{ url_for('search') }}" class="button">Search Existing Forms</a>
+      <img src="{{ url_for('static', filename='building.jpg') }}" alt="School Building" class="building-image">
+    </div>
 
-    <a href="{{ url_for('add_form') }}" class="button">➕ Create/Add a New Form</a>
-
-    <a href="{{ url_for('search') }}" class="button">🔎 Search Existing Forms</a>
-
+    <div class="right-side">
+      Jaipur, Rajasthan<br>Since 2005
+    </div>
   </div>
-
-  <footer>
-    © 2025 Fluorescent Public School. All rights reserved.
-  </footer>
 
 </body>
 </html>
