@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- IMPORTANT for mobile -->
   <title>Fluorescent Public School Counseling</title>
   <style>
     body {
@@ -31,6 +32,9 @@
 
     .container {
       padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .building-img {
@@ -40,6 +44,7 @@
       border-radius: 15px;
       margin: 20px auto;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      animation: fadeIn 2s ease-in;
     }
 
     .button {
@@ -56,6 +61,7 @@
       border-radius: 12px;
       transition: background-color 0.3s, transform 0.2s;
       text-decoration: none;
+      animation: fadeIn 2s ease-in;
     }
 
     .button:hover {
@@ -68,6 +74,32 @@
       padding: 20px;
       font-size: 14px;
       color: #555;
+    }
+
+    /* Fade In Animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive Design for Mobile */
+    @media (max-width: 768px) {
+      header img {
+        width: 80px;
+      }
+
+      header h1 {
+        font-size: 26px;
+      }
+
+      .building-img {
+        width: 95%;
+      }
+
+      .button {
+        width: 90%;
+        font-size: 16px;
+      }
     }
   </style>
 </head>
