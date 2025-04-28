@@ -40,6 +40,8 @@
 
     .container {
       padding: 40px 20px;
+      max-width: 900px;
+      margin: 0 auto;
     }
 
     .building-img {
@@ -49,6 +51,7 @@
       border-radius: 15px;
       margin: 20px auto;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      display: block;
       animation: fadeIn 2s ease;
     }
 
@@ -57,10 +60,16 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    .buttons-wrapper {
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
     .button {
-      display: inline-block;
       width: 280px;
-      margin: 20px 10px;
       padding: 18px;
       background-color: #004080;
       color: white;
@@ -96,27 +105,21 @@
       animation: fadeIn 2s ease;
     }
 
-    /* Make it look great on phones */
+    /* Mobile responsiveness */
     @media (max-width: 768px) {
       header h1 {
         font-size: 26px;
       }
 
-      .button {
-        width: 90%;
-        font-size: 16px;
-        margin: 10px auto;
-      }
-
-      .container {
-        padding: 20px 10px;
-      }
-
       .building-img {
         width: 95%;
       }
-    }
 
+      .button {
+        width: 90%;
+        font-size: 16px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -131,9 +134,10 @@
 
     <img src="{{ url_for('static', filename='building.jpg') }}" alt="School Building" class="building-img">
 
-    <a href="{{ url_for('add_form') }}" class="button">➕ Create/Add a New Form</a>
-
-    <a href="{{ url_for('search') }}" class="button">🔎 Search Existing Forms</a>
+    <div class="buttons-wrapper">
+      <a href="{{ url_for('add_form') }}" class="button">➕ Create/Add a New Form</a>
+      <a href="{{ url_for('search') }}" class="button">🔎 Search Existing Forms</a>
+    </div>
 
   </div>
 
