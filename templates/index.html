@@ -2,15 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- IMPORTANT for mobile -->
   <title>Fluorescent Public School Counseling</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to right, #e0f7ff, #ffffff);
       margin: 0;
       padding: 0;
       text-align: center;
+      color: #003366;
+      background: linear-gradient(-45deg, #e0f7ff, #ffffff, #e0f7ff, #ffffff);
+      background-size: 400% 400%;
+      animation: gradientMove 15s ease infinite;
+    }
+
+    @keyframes gradientMove {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
     }
 
     header {
@@ -30,11 +38,14 @@
       margin: 10px 0 5px 0;
     }
 
+    header p {
+      margin: 5px 0;
+      font-size: 16px;
+      font-style: italic;
+    }
+
     .container {
       padding: 40px 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
     }
 
     .building-img {
@@ -43,14 +54,13 @@
       height: auto;
       border-radius: 15px;
       margin: 20px auto;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      animation: fadeIn 2s ease-in;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
     }
 
     .button {
-      display: block;
+      display: inline-block;
       width: 280px;
-      margin: 20px auto;
+      margin: 20px 10px;
       padding: 18px;
       background-color: #004080;
       color: white;
@@ -59,47 +69,31 @@
       font-weight: bold;
       cursor: pointer;
       border-radius: 12px;
-      transition: background-color 0.3s, transform 0.2s;
+      transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
       text-decoration: none;
-      animation: fadeIn 2s ease-in;
+      animation: pulse 2s infinite;
     }
 
     .button:hover {
       background-color: #0066cc;
-      transform: scale(1.05);
+      transform: scale(1.08);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+      100% { transform: scale(1); }
     }
 
     footer {
-      margin-top: 40px;
+      margin-top: 60px;
       padding: 20px;
+      background-color: #f0f8ff;
       font-size: 14px;
       color: #555;
-    }
-
-    /* Fade In Animation */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Responsive Design for Mobile */
-    @media (max-width: 768px) {
-      header img {
-        width: 80px;
-      }
-
-      header h1 {
-        font-size: 26px;
-      }
-
-      .building-img {
-        width: 95%;
-      }
-
-      .button {
-        width: 90%;
-        font-size: 16px;
-      }
+      border-top: 2px solid #004080;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
     }
   </style>
 </head>
@@ -115,14 +109,15 @@
 
     <img src="{{ url_for('static', filename='building.jpg') }}" alt="School Building" class="building-img">
 
-    <a href="{{ url_for('add_form') }}" class="button">➕ Create/Add a New Form</a>
-
-    <a href="{{ url_for('search') }}" class="button">🔎 Search Existing Forms</a>
+    <div>
+      <a href="{{ url_for('add_form') }}" class="button">➕ Create/Add a New Form</a>
+      <a href="{{ url_for('search') }}" class="button">🔎 Search Existing Forms</a>
+    </div>
 
   </div>
 
   <footer>
-    © 2025 Fluorescent Public School. All rights reserved.
+    © 2025 Fluorescent Public School. All rights reserved. | Designed with ❤️
   </footer>
 
 </body>
