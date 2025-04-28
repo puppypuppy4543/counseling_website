@@ -2,128 +2,139 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Counseling Form</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Add Counseling Form</title>
     <style>
-        .form-box {
-            border: 2px solid #000;
+        body {
+            font-family: Arial, sans-serif;
             padding: 20px;
-            margin-top: 20px;
-            position: relative;
+            background-color: #f5f5f5;
         }
-        .form-box h4 {
-            position: absolute;
-            top: -20px;
-            left: 20px;
-            background: #fff;
-            padding: 0 10px;
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 2px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-<div class="container mt-5">
-    <h2 class="mb-4">Add New Counseling Form</h2>
-    <form method="POST" action="/add">
-        <div class="mb-3 row">
-            <label class="col-sm-2 col-form-label">Session</label>
-            <div class="col-sm-4"><input type="text" name="session" class="form-control" required></div>
-
-            <label class="col-sm-2 col-form-label">Form Number</label>
-            <div class="col-sm-4"><input type="text" name="form_number" class="form-control" required></div>
-        </div>
-
-        <div class="mb-3 row">
-            <label class="col-sm-2 col-form-label">Date</label>
-            <div class="col-sm-4"><input type="date" name="date" class="form-control" required></div>
-        </div>
-
-        <div class="form-box">
-            <h4>Counseling Form</h4>
-
-            <div class="mb-3">
-                <label>Name</label>
-                <input type="text" name="student_name" class="form-control" required>
+    <div class="container">
+        <h1>Counseling Form</h1>
+        <form method="POST" action="/add">
+            <div class="form-group">
+                <label>Session</label>
+                <input type="text" name="session" required>
             </div>
-
-            <div class="mb-3">
-                <label>Seeking admission in class</label>
-                <input type="text" name="admission_class" class="form-control" required>
+            <div class="form-group">
+                <label>Form Number</label>
+                <input type="text" name="form_number" required>
             </div>
-
-            <div class="mb-3">
+            <div class="form-group">
+                <label>Date</label>
+                <input type="date" name="date" required>
+            </div>
+            <div class="form-group">
+                <label>Student Name</label>
+                <input type="text" name="name" required>
+            </div>
+            <div class="form-group">
+                <label>Admission Class</label>
+                <input type="text" name="admission_class" required>
+            </div>
+            <div class="form-group">
                 <label>Father's Name</label>
-                <input type="text" name="father_name" class="form-control" required>
+                <input type="text" name="father_name" required>
             </div>
-
-            <div class="mb-3">
+            <div class="form-group">
                 <label>Father's Occupation</label>
-                <input type="text" name="father_occupation" class="form-control">
+                <input type="text" name="father_occupation">
             </div>
-
-            <div class="mb-3">
+            <div class="form-group">
                 <label>Address</label>
-                <textarea name="address" class="form-control" rows="2"></textarea>
+                <textarea name="address" rows="3" required></textarea>
             </div>
-
-            <div class="mb-3">
+            <div class="form-group">
                 <label>Referred By</label>
-                <input type="text" name="referred_by" class="form-control">
+                <input type="text" name="referred_by">
             </div>
-
-            <div class="mb-3">
+            <div class="form-group">
                 <label>Last School</label>
-                <input type="text" name="last_school" class="form-control">
+                <input type="text" name="last_school">
             </div>
-
-            <div class="mb-3">
+            <div class="form-group">
                 <label>Phone Number</label>
-                <input type="tel" name="phone_number" class="form-control" required>
+                <input type="tel" name="phone" required>
             </div>
-
-            <div class="mb-3">
-                <label>School Visited</label>
-                <select name="school_visited" class="form-control">
+            <div class="form-group">
+                <label>School Visited (Yes/No)</label>
+                <select name="school_visited" required>
+                    <option value="">Select</option>
                     <option value="Yes">Yes</option>
                     <option value="No">No</option>
                 </select>
             </div>
-
-            <div class="mb-3">
-                <label>Proposed Fee</label>
-                <input type="text" name="proposed_fee" class="form-control">
+            <div class="form-group">
+                <label>Proposed Fees</label>
+                <input type="text" name="proposed_fees">
             </div>
-
-            <div class="mb-3">
+            <div class="form-group">
                 <label>Discount Given</label>
-                <input type="text" name="discount_given" class="form-control">
+                <input type="text" name="discount_given">
             </div>
-
-            <div class="mb-3">
-                <label>Does Parent Agree to the Fee?</label>
-                <select name="fee_agreement" class="form-control">
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
-                </select>
+            <div class="form-group">
+                <label>Fee Agreement</label>
+                <input type="text" name="fee_agreement">
             </div>
-
-            <div class="mb-3">
+            <div class="form-group">
                 <label>Comments</label>
-                <textarea name="comments" class="form-control" rows="2"></textarea>
+                <textarea name="comments" rows="3"></textarea>
             </div>
-
-            <div class="mb-3">
+            <div class="form-group">
                 <label>Counseled By</label>
-                <input type="text" name="counseled_by" class="form-control">
+                <input type="text" name="counseled_by">
             </div>
-        </div>
-
-        <div class="mb-3 mt-4">
-            <label>Principal's Comments</label>
-            <textarea name="principal_comments" class="form-control" rows="2"></textarea>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Submit Form</button>
-    </form>
-</div>
+            <div class="form-group">
+                <label>Principal's Comments</label>
+                <textarea name="principals_comments" rows="3"></textarea>
+            </div>
+            <div style="text-align: center;">
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
 </body>
 </html>
+

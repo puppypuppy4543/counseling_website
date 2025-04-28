@@ -7,8 +7,6 @@ from google.oauth2.service_account import Credentials
 app = Flask(__name__)
 
 # Google Sheets setup
-# We need multiple scopes depending on the desired Google Sheets access. 
-# For appending rows and reading, we can use the following:
 scope = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive.file",
@@ -26,7 +24,7 @@ else:
 # Authorize gspread with the credentials
 client = gspread.authorize(creds)
 
-# Spreadsheet setup (replace with your actual Spreadsheet ID)
+# Spreadsheet setup
 SPREADSHEET_ID = "1vb_dh0SrwmKU8ZmXs0xNod1GJlvcMu-XqbyymeAkdyg"
 try:
     sheet = client.open_by_key(SPREADSHEET_ID).worksheet("Sheet1")
@@ -42,29 +40,28 @@ def index():
 @app.route("/add", methods=["GET", "POST"])
 def add_form():
     if request.method == "POST":
-        # Capture form data and prepare it for saving to the sheet
+        # Capture form data exactly in the order of Google Sheet headers
         data = [
             request.form.get("session", ""),
             request.form.get("form_number", ""),
             request.form.get("date", ""),
-            request.form.get("student_name", ""),
+            request.form.get("name", ""),               # corrected (not student_name)
             request.form.get("admission_class", ""),
             request.form.get("father_name", ""),
             request.form.get("father_occupation", ""),
             request.form.get("address", ""),
             request.form.get("referred_by", ""),
             request.form.get("last_school", ""),
-            request.form.get("phone_number", ""),
+            request.form.get("phone", ""),              # corrected (not phone_number)
             request.form.get("school_visited", ""),
+            request.form.get("proposed_fees", ""),      # corrected (was proposed_fee)
+            request.form.get("discount_given", ""),
+            request.form.get("fee_agreement", ""),      # corrected (was parent_agrees)
             request.form.get("comments", ""),
             request.form.get("counseled_by", ""),
-            request.form.get("proposed_fee", ""),
-            request.form.get("discount_given", ""),
-            request.form.get("parent_agrees", ""),
-            request.form.get("principal_comments", "")
+            request.form.get("principals_comments", "") # corrected (was principal_comments)
         ]
 
-        # Save to Google Sheet if connection exists
         if sheet:
             try:
                 sheet.append_row(data)
